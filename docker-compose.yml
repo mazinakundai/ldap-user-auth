@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  php:
+    image: php:8.2-apache
+    container_name: php-container
+    volumes:
+      - ./www:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+      - ldap
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: prescient_db
+      MYSQL_USER: prescientDbUser
+      MYSQL_PASSWORD: prescientDbPass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  ldap:
+    image: osixia/openldap:1.5.0
+    container_name: ldap-server
+    environment:
+      LDAP_ORGANISATION: "My Company"
+      LDAP_DOMAIN: "mycompany.com"
+      LDAP_ADMIN_PASSWORD: admin
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ldap-data:/var/lib/ldap
+      - ldap-config:/etc/ldap/slapd.d
+    networks:
+      - app-network
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:0.9.0
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap-server
+    ports:
+      - "6443:443"
+    networks:
+      - app-network
+    depends_on:
+      - ldap
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  ldap-data:
+  ldap-config:

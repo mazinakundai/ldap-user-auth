@@ -1,0 +1,66 @@
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.login-container h1 {
+  color: #3498db;
+}
+.login-container form {
+  display: flex;
+  flex-direction: column;
+}
+.login-container form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.login-container form input[type=text],
+.login-container form input[type=password] {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.login-container form button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.login-container form button:hover {
+  opacity: 0.8;
+}
+
+.user-list {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.user-list h1 {
+  color: #2ecc71;
+}
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.user-list table th, .user-list table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+.user-list table th {
+  background-color: #3498db;
+  color: #fff;
+}
+.user-list table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}/*# sourceMappingURL=styles.css.map */
