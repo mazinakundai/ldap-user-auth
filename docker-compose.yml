@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   php:
@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: php-container
     ports:
-      - "8080:80"
+      - "${PHP_PORT}:80"
     networks:
       - app-network
     depends_on:
@@ -18,14 +18,14 @@ services:
     image: mysql:8.0
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: prescient_db
-      MYSQL_USER: prescientDbUser
-      MYSQL_PASSWORD: prescientDbPass
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ${MYSQL_VOLUME}:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     networks:
       - app-network
 
@@ -33,15 +33,15 @@ services:
     image: osixia/openldap:1.5.0
     container_name: ldap-server
     environment:
-      LDAP_ORGANISATION: "My Company"
-      LDAP_DOMAIN: "mycompany.com"
-      LDAP_ADMIN_PASSWORD: admin
+      LDAP_ORGANISATION: "${LDAP_ORGANISATION}"
+      LDAP_DOMAIN: "${LDAP_DOMAIN}"
+      LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
     ports:
-      - "389:389"
-      - "636:636"
+      - "${LDAP_PORT}:389"
+      - "${LDAP_SECURE_PORT}:636"
     volumes:
-      - ldap-data:/var/lib/ldap
-      - ldap-config:/etc/ldap/slapd.d
+      - ${LDAP_DATA_VOLUME}:/var/lib/ldap
+      - ${LDAP_CONFIG_VOLUME}:/etc/ldap/slapd.d
     networks:
       - app-network
 
@@ -51,7 +51,7 @@ services:
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap-server
     ports:
-      - "6443:443"
+      - "${PHPLDAPADMIN_PORT}:443"
     networks:
       - app-network
     depends_on:
