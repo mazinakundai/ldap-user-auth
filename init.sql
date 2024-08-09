@@ -1,8 +1,18 @@
+-- create DB
 CREATE DATABASE IF NOT EXISTS prescient_db;
 USE prescient_db;
 
-DROP TABLE IF EXISTS users;
+-- Create a new user
+CREATE USER 'prescientDbUser'@'%' IDENTIFIED BY 'prescientDbPass';
 
+-- Grant all privileges on the database to the new user
+GRANT ALL PRIVILEGES ON prescient_db.* TO 'prescientDbUser'@'%';
+
+-- Flush privileges to ensure the changes take effect
+FLUSH PRIVILEGES;
+
+DROP TABLE IF EXISTS users;
+-- create users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     uid VARCHAR(255) NOT NULL,
@@ -13,6 +23,7 @@ CREATE TABLE users (
     company VARCHAR(255) NOT NULL
 );
 
+-- insert the users
 INSERT INTO users (uid, first_name, last_name, email, department, company) VALUES
 ('jdoe', 'John', 'Doe', 'john.doe@example.com', 'Sales', 'Acme Corp'),
 ('asmith', 'Alice', 'Smith', 'alice.smith@example.com', 'Marketing', 'Acme Corp'),
