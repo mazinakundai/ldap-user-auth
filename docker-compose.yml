@@ -1,4 +1,4 @@
-# version: '3.8'
+version: '3.8'
 
 services:
   php:
@@ -12,7 +12,11 @@ services:
       - app-network
     depends_on:
       - mysql
-      - ldap
+    environment:
+      MYSQL_HOST: "${MYSQL_HOST}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
 
   mysql:
     image: mysql:8.0
@@ -60,6 +64,7 @@ services:
 
 networks:
   app-network:
+    name: app-network
     driver: bridge
 
 volumes:

@@ -5,29 +5,32 @@ $username = getenv('MYSQL_USER');
 $password = getenv('MYSQL_PASSWORD');
 $dbname = getenv('MYSQL_DATABASE');
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+echo "Connecting to MySQL with the following parameters:\n";
+echo "Host: $servername\n";
+echo "Username: $username\n";
+echo "Password: $password\n";
+echo "Database: $dbname\n";
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    $dsn = "mysql:host=$servername;dbname=$dbname;charset=utf8mb4";
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connecting to the database...\n";
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
 
 $sql = "SELECT uid, first_name, last_name, email, department, company FROM users";
-$result = $conn->query($sql);
+$stmt = $pdo->query($sql);
 
-$users = [];
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
-    }
-} else {
-    echo "0 results";
-}
-$conn->close();
+$pdo = null; // Close the connection
 
+echo "Connection to the database closed WE GOT THE USERS...\n";
 // Function to create LDIF entry
 function createLdifEntry($user) {
-    $companyDn = "ou={$user['company']},dc=example,dc=org";
+    $companyDn = "ou={$user['company']},dc=mycompany,dc=com";
     $departmentDn = "ou={$user['department']},{$companyDn}";
     $dn = "uid={$user['uid']},ou=Users,{$departmentDn}";
 
@@ -41,6 +44,7 @@ function createLdifEntry($user) {
     $ldif .= "o: {$user['company']}\n";
     $ldif .= "userPassword: password\n"; // Set a default password
     $ldif .= "\n";
+    echo "LDIF USER ENTRY created...\n";
     return $ldif;
 }
 
@@ -48,11 +52,12 @@ function createLdifEntry($user) {
 function createCompanyAndDepartmentEntries($companiesAndDepartments) {
     $ldif = "";
     foreach ($companiesAndDepartments as $company => $departments) {
-        $companyDn = "ou={$company},dc=example,dc=org";
+        $companyDn = "ou={$company},dc=mycompany,dc=com";
         $ldif .= "dn: {$companyDn}\n";
         $ldif .= "objectClass: organizationalUnit\n";
         $ldif .= "ou: {$company}\n";
         $ldif .= "\n";
+        echo "LDIF COMPANY ENTRY created...\n";
 
         foreach ($departments as $department) {
             $departmentDn = "ou={$department},{$companyDn}";
@@ -60,6 +65,7 @@ function createCompanyAndDepartmentEntries($companiesAndDepartments) {
             $ldif .= "objectClass: organizationalUnit\n";
             $ldif .= "ou: {$department}\n";
             $ldif .= "\n";
+            echo "LDIF DEPT ENTRY created...\n";
         }
     }
     return $ldif;
@@ -84,6 +90,7 @@ foreach ($users as $user) {
     $ldifData .= createLdifEntry($user);
 }
 
+echo "SAVING LDIF DATA TO FILE ...\n";
 // Save LDIF data to file
 file_put_contents('/var/www/html/users.ldif', $ldifData);
 ?>

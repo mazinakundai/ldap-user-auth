@@ -2,11 +2,14 @@
 CREATE DATABASE IF NOT EXISTS prescient_db;
 USE prescient_db;
 
+-- Drop user if it exists
+DROP USER IF EXISTS 'pDbUser'@'%';
+
 -- Create a new user
-CREATE USER 'prescientDbUser'@'%' IDENTIFIED BY 'prescientDbPass';
+CREATE USER 'pDbUser'@'%' IDENTIFIED BY 'pDbPass';
 
 -- Grant all privileges on the database to the new user
-GRANT ALL PRIVILEGES ON prescient_db.* TO 'prescientDbUser'@'%';
+GRANT ALL PRIVILEGES ON prescient_db.* TO 'pDbUser'@'%';
 
 -- Flush privileges to ensure the changes take effect
 FLUSH PRIVILEGES;
