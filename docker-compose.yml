@@ -17,6 +17,10 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      LDAP_HOST: "${LDAP_HOST}"
+      LDAP_BASE_DN: "${LDAP_BASE_DN}"
+      LDAP_BIND_DN: "${LDAP_BIND_DN}"
+    command: /usr/local/bin/import-ldif.sh
 
   mysql:
     image: mysql:8.0
@@ -40,7 +44,7 @@ services:
     environment:
       LDAP_ORGANISATION: "${LDAP_ORGANISATION}"
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
-      LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
+      LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}" 
     ports:
       - "${LDAP_PORT}:389"
       - "${LDAP_SECURE_PORT}:636"

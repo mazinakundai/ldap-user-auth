@@ -1,0 +1,13 @@
+# Entry 1: cn=Admin,ou=groups,dc=mycompany,dc=com
+dn: cn=Admin,ou=groups,dc=mycompany,dc=com
+cn: Admin
+gidnumber: 500
+objectclass: posixGroup
+objectclass: top
+
+# Entry 1: cn=Normal User,ou=groups,dc=mycompany,dc=com
+dn: cn=Normal User,ou=groups,dc=mycompany,dc=com
+cn: Normal User
+gidnumber: 503
+objectclass: posixGroup
+objectclass: top

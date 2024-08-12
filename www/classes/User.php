@@ -7,7 +7,7 @@ class User {
     }
 
     public function fetchUsersGrouped() {
-        $stmt = $this->pdo->query("SELECT uid, first_name, last_name, email, department, company FROM users ORDER BY company, department");
+        $stmt = $this->pdo->query("SELECT uid, uid_number, first_name, last_name, email, group, department, company FROM users ORDER BY company, department");
         $users = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $users[$row['company']][$row['department']][] = $row['username'];
