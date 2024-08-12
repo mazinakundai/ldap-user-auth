@@ -58,8 +58,76 @@ function createLdifEntry($user) {
     return $ldif;
 }
 
+function createCompanyGroups () {
+    
+    # Entry 1: dc=mycompany,dc=com
+    $ldif = "dn: dc=mycompany,dc=com\n";
+    $ldif .= "dc: mycompany\n";
+    $ldif .= "o: My Company\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "objectclass: dcObject\n";
+    $ldif .= "objectclass: organization\n";
+    $ldif .= "\n";
+    echo "LDIF COMPANY ENTRY created...\n";
+
+    # Entry 2: ou=groups,dc=mycompany,dc=com
+    $ldif .= "dn: ou=groups,dc=mycompany,dc=com\n";
+    $ldif .= "objectclass: organizationalUnit\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "ou: groups\n";
+    $ldif .= "\n";
+    echo "LDIF GROUPS ENTRY created...\n";
+
+    # Entry 3: cn=Admin,ou=groups,dc=mycompany,dc=com
+    $ldif .= "dn: cn=Admin,ou=groups,dc=mycompany,dc=com\n";
+    $ldif .= "cn: Admin\n";
+    $ldif .= "gidnumber: 500\n";
+    $ldif .= "objectclass: posixGroup\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "\n";
+    echo "LDIF GROUP ENTRY created...\n";
+
+    # Entry 4: cn=Normal User,ou=groups,dc=mycompany,dc=com
+    $ldif .= "dn: cn=Normal User,ou=groups,dc=mycompany,dc=com\n";
+    $ldif .= "cn: Normal User\n";
+    $ldif .= "gidnumber: 503\n";
+    $ldif .= "objectclass: posixGroup\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "\n";
+    echo "LDIF GROUP ENTRY created...\n";
+
+    # Entry 5: cn=Super User,ou=groups,dc=mycompany,dc=com
+    $ldif .= "dn: cn=Super User,ou=groups,dc=mycompany,dc=com\n";
+    $ldif .= "cn: Super User\n";
+    $ldif .= "gidnumber: 502\n";
+    $ldif .= "objectclass: posixGroup\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "\n";
+    echo "LDIF GROUP ENTRY created...\n";
+
+    # Entry 6: cn=Support,ou=groups,dc=mycompany,dc=com
+    $ldif .= "dn: cn=Support,ou=groups,dc=mycompany,dc=com\n";
+    $ldif .= "cn: Support\n";
+    $ldif .= "gidnumber: 501\n";
+    $ldif .= "objectclass: posixGroup\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "\n";
+    echo "LDIF GROUP ENTRY created...\n";
+    
+    # Entry 7: ou=users,dc=mycompany,dc=com
+    $ldif .= "dn: ou=users,dc=mycompany,dc=com\n";
+    $ldif .= "objectclass: organizationalUnit\n";
+    $ldif .= "objectclass: top\n";
+    $ldif .= "ou: users\n";
+    $ldif .= "\n";
+    echo "LDIF USERS ENTRY created...\n";
+
+    return $ldif;
+}
+
 // Create LDIF data
 $ldifData = "";
+$ldifData .= createCompanyGroups();
 
 foreach ($users as $user) {
     $ldifData .= createLdifEntry($user);
